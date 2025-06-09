@@ -1,0 +1,52 @@
+#Day3_624_Maximum Distance in Arrays
+#Premium Algo
+"""
+You are given m arrays, where each array is sorted in ascending order.
+You can pick up two integers from two different arrays (each array picks one) and calculate the distance. 
+We define the distance between two integers a and b to be their absolute difference |a - b|.
+Return the maximum distance.
+"""
+
+class Solution:
+    def maxDistance(self, arrays: List[List[int]]) -> int:
+        first_min, second_min = [-1, sys.maxsize], [-1, sys.maxsize]
+        first_max, second_max = [-1, -sys.maxsize-1], [-1, -sys.maxsize-1]
+        m = len(arrays)
+        for i in range(0, m):
+            if arrays[i][0] <= first_min[1]:
+                second_min[0], second_min[1] = first_min[0], first_min[1]
+                first_min[0], first_min[1] = i, arrays[i][0]
+            elif arrays[i][0] > first_min[1] and arrays[i][0] <= second_min[1]:
+                second_min[0], second_min[1] = i, arrays[i][0]
+            
+            n = len(arrays[i])
+            if arrays[i][n-1] >= first_max[1]:
+                second_max[0], second_max[1]  = first_max[0], first_max[1]
+                first_max[0], first_max[1] = i, arrays[i][n-1]
+            elif arrays[i][n-1] < first_max[1] and arrays[i][n-1] >= second_max[1]:
+                second_max[0], second_max[1]  = i, arrays[i][n-1]
+            
+        if first_max[0] != first_min[0]:
+            return first_max[1] - first_min[1]
+        else:
+            return max(second_max[1] - first_min[1] if second_max[0] != first_min[0] else -sys.maxsize-1, first_max[1] - second_min[1] if first_max[0] != second_min[0] else -sys.maxsize-1, second_max[1] - second_min[1] if second_max[0] != second_min[0] else -sys.maxsize-1 )
+
+#Note: Always remember while calculating second max, there's a case where an element < first_max but element > second_max
+#Time Complexity - O(m)
+#Space Complexity - O(1)
+"""#### Better Solution ######
+class Solution:
+    def maxDistance(self, arrays: List[List[int]]) -> int:
+        result = 0
+        minVal = arrays[0][0]
+        maxVal = arrays[0][len(arrays[0])-1]
+    
+        for i in range(1, len(arrays)):
+            result = max(result, abs(arrays[i][len(arrays[i])-1] - minVal), abs(maxVal - arrays[i][0]))
+            minVal = min(minVal, arrays[i][0])
+            maxVal = max(maxVal, arrays[i][len(arrays[i])-1])
+        
+        return result
+
+#### Better Solution ######"""
+            
