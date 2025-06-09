@@ -77,5 +77,39 @@ class Solution:
 
 #Time Complexity = O(n)
 #Space Complexity = O(1)
+
+"""670. Maximum Swap
+You are given an integer num. You can swap two digits at most once to get the maximum valued number.
+Return the maximum valued number you can get."""
+
+class Solution:
+    def maximumSwap(self, num: int) -> int:
+        temp_num = num
+        max_val = temp_num % 10
+        max_index = 0
+        swap = [0, 0, 0, 0]
+        curr_index = 0
+        while temp_num > 0:
+            digit = temp_num % 10
+            if digit < max_val:
+                swap[0], swap[1], swap[2], swap[3] = curr_index, max_index, digit, max_val
+            elif  digit > max_val:
+                max_index = curr_index
+                max_val = digit
+
+            curr_index += 1
+            temp_num = temp_num // 10
         
+        if swap[0] == swap[1]:
+            return num
+        
+        first_num_subtract = (swap[2])*(10**swap[0])
+        secon_num_subtract = (swap[3])*(10**swap[1])
+        first_num_add = (swap[2])*(10**swap[1])
+        second_num_add = (swap[3])*(10**swap[0])
+
+        return num - first_num_subtract - secon_num_subtract + first_num_add + second_num_add
+
+# TimeComplexity O(n) -> n be the number of digits
+# SpaceComplexity O(1)        
             
