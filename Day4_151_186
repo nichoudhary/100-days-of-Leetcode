@@ -1,0 +1,74 @@
+"""151. Reverse Words in a String
+
+Given an input string s, reverse the order of the words.
+A word is defined as a sequence of non-space characters. The words in s will be separated by at least one space.
+Return a string of the words in reverse order concatenated by a single space.
+Note that s may contain leading or trailing spaces or multiple spaces between two words.
+The returned string should only have a single space separating the words. Do not include any extra spaces."""
+
+class Solution:
+    def reverse(self, s:str) -> str:
+        result = ""
+        for i in range(0, len(s)):
+            result = s[i] + result
+        return result
+
+    def reverseWords(self, s: str) -> str:
+
+        start = 0
+        end = 0
+        result = ""
+
+        while end < len(s):
+            if s[start] == ' ':
+                start += 1
+            elif s[end] == ' ':
+                output = self.reverse(s[start: end])
+                result = result + output +' '
+                start = end+1
+            elif end == len(s)-1:
+                output = self.reverse(s[start: end+1])
+                result = result + output
+            
+            end += 1
+        result = self.reverse(result)
+        i = 0
+        while i < len(result):
+            if result[i] == ' ':
+                i += 1
+            else:
+                break
+        return result[i:]
+
+# Time Complexity O(n)
+# Space Complexity O(n)
+
+"""186. Reverse Words in a String II
+Given a character array s, reverse the order of the words.
+A word is defined as a sequence of non-space characters. The words in s will be separated by a single space.
+Your code must solve the problem in-place, i.e. without allocating extra space."""
+
+class Solution:
+    def reverse(self, s, start, end):
+        while end > start:
+            temp = s[end]
+            s[end] = s[start]
+            s[start] = temp
+            end -= 1
+            start += 1
+
+    def reverseWords(self, s: List[str]) -> None:
+
+        start = 0
+        end = 0
+        while end < len(s):
+            if s[end] == " ":
+                self.reverse(s, start, end-1)
+                start = end+1
+            elif end == len(s)-1:
+                self.reverse(s, start, end)
+            end += 1
+        self.reverse(s, 0, len(s)-1)
+
+#TimeComplexity O(n)
+#SpaceComplexity O(1)
