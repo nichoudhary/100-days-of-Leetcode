@@ -1,0 +1,42 @@
+#433. Minimum Genetic Mutation
+
+class Solution:
+
+    def getCombinations(self, gene:str, geneset:set, visited:set) -> List[str]:
+
+        ans = []
+
+        for c in "ACGT":
+            for i in range(0, len(gene)):
+                option = gene[:i] + c + gene[i+1:]
+                if option in geneset and option not in visited:
+                    ans.append(option)
+        return ans
+
+
+
+    def minMutation(self, startGene: str, endGene: str, bank: List[str]) -> int:
+        geneset = set()
+        visited = set()
+        for i in range(0, len(bank)):
+            geneset.add(bank[i])
+
+        q = deque()
+        q.append([startGene, 0])
+
+        while q:
+            element = q.popleft()
+            gene, level = element[0], element[1]
+            visited.add(gene)
+            if gene == endGene:
+                return level
+            validGeneCombinations = self.getCombinations(gene, geneset, visited)
+            for i in range(0, len(validGeneCombinations)):
+                q.append([validGeneCombinations[i], level+1])
+
+        return -1
+
+#Time Complexity: O(n)
+#Space Complexity: O(n)
+
+        
